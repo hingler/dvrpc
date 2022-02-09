@@ -43,10 +43,11 @@ export class FeatureManager {
   testCollision(latlong: vec2) {
     for (let i = 0; i < this.collisionList.length; i++) {
       if (this.collisionList[i].testCollision(latlong)) {
-        console.log(this.collisionList[i].props);
         return this.collisionList[i];
       }
     }
+
+    return null;
   }
 
   private static cleanUpFeature(feature: DVRPCFeature) {
@@ -62,10 +63,6 @@ export class FeatureManager {
   }
 
   private static flipPolyData(feature: DVRPCFeature) {
-    if (feature.geometry.coordinates.length > 1) {
-      console.log("eep!!!");
-      console.log(feature.geometry.coordinates);
-    }
 
     for (let poly of feature.geometry.coordinates) {
       for (let point of poly) {

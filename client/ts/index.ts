@@ -1,6 +1,7 @@
 import * as L from "leaflet";
 import { DVRPCFeatureCollection } from "./mapdata/mapTypes";
 import { FeatureManager } from "./maphandler/FeatureManager";
+import { StatsModal } from "./maphandler/StatsModal";
 
 window.addEventListener("load", main);
 
@@ -35,13 +36,10 @@ async function main() {
   const data = await resp.json() as DVRPCFeatureCollection;
   console.log(data);
   features = new FeatureManager(data, map);
-
-  map.on("mousemove", handleMouseEvent);
+  
+  const modal = new StatsModal(features);
+  map.on("mousemove", modal.handleMouseEvent.bind(modal));
 
   // -- create bounding spheres around each poly
   // when the mouse moves:
-}
-
-function handleMouseEvent(e: L.LeafletMouseEvent) {
-  features.testCollision([e.latlng.lat, e.latlng.lng]);
 }
