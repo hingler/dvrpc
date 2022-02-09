@@ -1,5 +1,7 @@
 import { FeatureManager } from "./FeatureManager";
 import { PolyBounds } from "./PolyBounds";
+import * as L from "leaflet";
+import { Point2D } from "../mapdata/mapTypes";
 
 const STATS_IDS = [
   "ipd_score",
@@ -18,10 +20,12 @@ export class StatsModal {
   private manager : FeatureManager;
   private lastCollision : PolyBounds;
   private htmlModal : HTMLElement;
+  private highlightedPoly : L.Polygon;
 
   constructor(manager: FeatureManager) {
     this.manager = manager;
     this.lastCollision = null;
+    this.highlightedPoly = null;
     this.htmlModal = document.getElementById("stats");
     this.updateModal();
 
@@ -37,9 +41,15 @@ export class StatsModal {
   }
 
   private updateModal() {
+    if (this.highlightedPoly !== null) {
+      this.manager.getMap().removeLayer(this.highlightedPoly);
+    }
+
     if (this.lastCollision === null) {
       this.htmlModal.classList.add("hidden");
     } else {
+      this.highlightedPoly = L.polygon(this.lastCollision.getPolyData() as Array<Array<Point2D>>, { color: "white"});
+      this.manager.getMap().addLayer(this.highlightedPoly);
       this.htmlModal.classList.remove("hidden");
       for (let stat of STATS_IDS) {
         document.getElementById(stat).querySelector(".score").textContent = this.lastCollision.props[stat];

@@ -1,7 +1,9 @@
 import { DVRPCFeature, DVRPCFeatureCollection, Point2D } from "../mapdata/mapTypes";
 import * as L from "leaflet";
 import { PolyBounds } from "./PolyBounds";
-import { vec2 } from "gl-matrix";
+import { vec2, vec3 } from "gl-matrix";
+import { HSVGradient } from "../gradient/HSVGradient";
+import { rgbToHexString } from "../gradient/rgbToHexString";
 
 export class FeatureManager {
   private featurelist: DVRPCFeatureCollection;
@@ -18,13 +20,31 @@ export class FeatureManager {
     }
 
     const multipoly : Array<Array<Array<Point2D>>> = [];
+    const colorMap : Map<number, Array<Array<Array<Point2D>>>> = new Map();
     for (let feature of features.features) {
+      const ipd = feature.properties.ipd_score;
+      if (!colorMap.has(ipd)) {
+        colorMap.set(ipd, []);
+      }
+
+      colorMap.get(ipd).push(feature.geometry.coordinates);
       multipoly.push(feature.geometry.coordinates);
     }
 
     const perfStart = performance.now();
-    const poly = L.polygon(multipoly, {color: "blue"}).addTo(map);
-    map.fitBounds(poly.getBounds());
+
+    // classify by color
+    const colorGrad = new HSVGradient();
+    colorGrad.addRGBStop([0, 240, 120], 36);
+    colorGrad.addRGBStop([192, 128, 255], 12);
+    for (let col of colorMap) {
+      const colString = rgbToHexString(colorGrad.getColor(col[0]) as vec3);
+      console.log(colString);
+      const poly = L.polygon(col[1], { color: colString, weight: 1});
+      map.addLayer(poly);
+    }
+
+    // map.fitBounds();
     const perfEnd = performance.now();
     
     console.log(`Polygons constructed in ${perfEnd - perfStart} MS`)
@@ -38,6 +58,10 @@ export class FeatureManager {
     const perfBoundsEnd = performance.now();
 
     console.log(`Collision boxes generated in ${perfBoundsEnd - perfEnd} MS`);
+  }
+
+  getMap() {
+    return this.map;
   }
 
   testCollision(latlong: vec2) {

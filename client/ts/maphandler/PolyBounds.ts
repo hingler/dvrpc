@@ -1,4 +1,4 @@
-import { vec2 } from "gl-matrix";
+import { ReadonlyVec2, vec2 } from "gl-matrix";
 import { DVRPCProperties, Point2D } from "../mapdata/mapTypes";
 import { polyBoundsCheck } from "./polyBoundsCheck";
 
@@ -38,6 +38,10 @@ export class PolyBounds {
     }
 
     this.radius = maxLength;
+  }
+
+  getPolyData() {
+    return this.points as Array<Array<vec2>>;
   }
 
   testCollision(latlong: vec2) {
