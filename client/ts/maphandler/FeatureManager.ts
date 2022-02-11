@@ -39,7 +39,6 @@ export class FeatureManager {
     colorGrad.addRGBStop([192, 128, 255], 12);
     for (let col of colorMap) {
       const colString = rgbToHexString(colorGrad.getColor(col[0]) as vec3);
-      console.log(colString);
       const poly = L.polygon(col[1], { color: colString, weight: 1});
       map.addLayer(poly);
     }
@@ -47,7 +46,7 @@ export class FeatureManager {
     // map.fitBounds();
     const perfEnd = performance.now();
     
-    console.log(`Polygons constructed in ${perfEnd - perfStart} MS`)
+    console.debug(`Polygons constructed in ${perfEnd - perfStart} MS`)
 
     this.collisionList = [];
 
@@ -57,7 +56,7 @@ export class FeatureManager {
 
     const perfBoundsEnd = performance.now();
 
-    console.log(`Collision boxes generated in ${perfBoundsEnd - perfEnd} MS`);
+    console.debug(`Collision boxes generated in ${perfBoundsEnd - perfEnd} MS`);
   }
 
   getMap() {

@@ -65,7 +65,6 @@ export class HSVGradient {
     vec3.zero(res);
     vec3.scaleAndAdd(res, res, this.colorList[stopIndex - 1], (1.0 - stopMix));
     vec3.scaleAndAdd(res, res, this.colorList[stopIndex], stopMix);
-    console.log(HSVGradient.hsvToRGB(res));
     return HSVGradient.hsvToRGB(res);
   }
 

@@ -34,7 +34,6 @@ async function main() {
   }
 
   const data = await resp.json() as DVRPCFeatureCollection;
-  console.log(data);
   features = new FeatureManager(data, map);
   
   const modal = new StatsModal(features);
