@@ -19,7 +19,7 @@ async function main() {
   });
 
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a> | Data provided by <a href="https://dvrpc-dvrpcgis.opendata.arcgis.com/datasets/greater-philadelphia-tract-level-indicators-of-potential-disadvantage-ipd-2019/explore">DVRPC, 2019 Indicators of Potential Disadvantage</a>',
     maxZoom: 18,
     id: 'mapbox/streets-v11',
     tileSize: 512,
