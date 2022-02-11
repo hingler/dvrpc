@@ -20,6 +20,7 @@ export class StatsModal {
   private manager : FeatureManager;
   private lastCollision : PolyBounds;
   private htmlModal : HTMLElement;
+  private htmlHead  : HTMLElement;
   private highlightedPoly : L.Polygon;
 
   constructor(manager: FeatureManager) {
@@ -27,6 +28,7 @@ export class StatsModal {
     this.lastCollision = null;
     this.highlightedPoly = null;
     this.htmlModal = document.getElementById("stats");
+    this.htmlHead = document.querySelector("h1");
     this.updateModal();
 
     addEventListener("mousemove", this.handleModalPosition.bind(this));
@@ -43,6 +45,15 @@ export class StatsModal {
 
   private getModalOffset(mouseX: number, mouseY: number) : [number, number] {
     const modalSize = this.htmlModal.getBoundingClientRect();
+    const headSize  = this.htmlHead.getBoundingClientRect();
+
+    if (mouseY < headSize.y + headSize.height) {
+      // this should be sufficient
+      this.htmlModal.classList.add("hidden");
+      this.manager.getMap().removeLayer(this.highlightedPoly);
+      this.lastCollision = null;
+    }
+
     const res : [number, number] = [16, 16];
 
     if (mouseX + modalSize.width + 16 > window.innerWidth) {
