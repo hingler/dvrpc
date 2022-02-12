@@ -1,5 +1,11 @@
 import { vec2 } from "gl-matrix";
 
+/**
+ * Function which performs bounds checking on an array of points.
+ * @param poly - the polygon being tested. vertices must be ordered CW or CCW.
+ * @param point - the point we wish to test.
+ * @returns true if the point is inside the polygon, false otherwise.
+ */
 export function polyBoundsCheck(poly: Array<vec2>, point: vec2) {
   const temp = [] as Array<number> as vec2;
 

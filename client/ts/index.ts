@@ -39,5 +39,4 @@ async function main() {
   const modal = new StatsModal(features);
 
   document.getElementById("loading").classList.add("hidden");
-  map.on("mousemove", modal.handleMouseEvent.bind(modal));
 }

@@ -60,6 +60,7 @@ export class HSVGradient {
     const stopA = this.stopList[stopIndex - 1];
     const stopB = this.stopList[stopIndex];
     const stopDelta = stopB - stopA;
+
     const stopMix = ((stop - stopA) / stopDelta);
 
     vec3.zero(res);
@@ -69,7 +70,7 @@ export class HSVGradient {
   }
 
   private static hsvToRGB(hsv: vec3) {
-    if (hsv[0] === NaN) {
+    if (isNaN(hsv[0])) {
       return [hsv[2], hsv[2], hsv[2]];
     }
 
@@ -98,10 +99,13 @@ export class HSVGradient {
     let minChannel = -1;
     const maxValue = Math.max(...col);
     const minValue = Math.min(...col);
+
     for (let i = 0; i < 3; i++) {
       if (maxValue === col[i]) {
         maxChannel = i;
-      } else if (minValue === col[i]) {
+      }
+      
+      if (minValue === col[i]) {
         minChannel = i;
       }
     }
@@ -115,9 +119,9 @@ export class HSVGradient {
 
     // 0 - 6, from the paper
     // NaN will be our undefined val placeholder
-    const hue = (hueDiff === 0 ? NaN : hueDiff / delta + 2 * maxChannel);
+    const hue = (delta === 0 ? NaN : hueDiff / delta + 2 * maxChannel);
     const val = maxValue;
-    const sat = (maxValue - minValue) / val;
+    const sat = (val === 0 ? 0 : (maxValue - minValue) / val);
 
     return [hue, sat, val] as vec3;
   }

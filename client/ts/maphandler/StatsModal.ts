@@ -16,6 +16,9 @@ const STATS_IDS = [
   "y_score"
 ];
 
+/**
+ * Handles mouse interaction and updates IPD modal.
+ */
 export class StatsModal {
   private manager : FeatureManager;
   private lastCollision : PolyBounds;
@@ -31,27 +34,36 @@ export class StatsModal {
     this.htmlHead = document.querySelector("h1");
     this.updateModal();
 
-    addEventListener("mousemove", this.handleModalPosition.bind(this));
+    // setup events
+    this.manager.getMap().on("mousemove", this.handleMouseEvent.bind(this));
 
-    // build around an HTML element which can contain map data
+    addEventListener("mousemove", this.handleModalPosition.bind(this));
+    document.addEventListener("mouseleave", this.removeModal.bind(this));
   }
 
-  handleModalPosition(e: MouseEvent) {
+  private handleModalPosition(e: MouseEvent) {
     const offset = this.getModalOffset(e.clientX, e.clientY);
-
     this.htmlModal.style.left = e.clientX + offset[0] + "px";
     this.htmlModal.style.top = e.clientY + offset[1] + "px";
   }
 
+  // called whenever our mouse is off the map to hide indicators
+  private removeModal() {
+    this.htmlModal.classList.add("hidden");
+    if (this.highlightedPoly !== null) {
+      this.manager.getMap().removeLayer(this.highlightedPoly);
+      this.highlightedPoly = null;
+    }
+    this.lastCollision = null;
+  }
+
+  // called to position stats modal
   private getModalOffset(mouseX: number, mouseY: number) : [number, number] {
     const modalSize = this.htmlModal.getBoundingClientRect();
     const headSize  = this.htmlHead.getBoundingClientRect();
 
     if (mouseY < headSize.y + headSize.height) {
-      // this should be sufficient
-      this.htmlModal.classList.add("hidden");
-      this.manager.getMap().removeLayer(this.highlightedPoly);
-      this.lastCollision = null;
+      this.removeModal();
     }
 
     const res : [number, number] = [16, 16];
@@ -67,7 +79,8 @@ export class StatsModal {
     return res;
   }
 
-  handleMouseEvent(e: L.LeafletMouseEvent) {
+  // handles mouse events from our leaflet map
+  private handleMouseEvent(e: L.LeafletMouseEvent) {
     const collide = this.manager.testCollision([e.latlng.lat, e.latlng.lng]);
     if (collide !== this.lastCollision) {
       this.lastCollision = collide;
@@ -75,6 +88,7 @@ export class StatsModal {
     }
   }
 
+  // updates modal data and indicates highlighted region
   private updateModal() {
     if (this.highlightedPoly !== null) {
       this.manager.getMap().removeLayer(this.highlightedPoly);
