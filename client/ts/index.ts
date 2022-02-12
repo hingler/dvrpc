@@ -37,8 +37,7 @@ async function main() {
   features = new FeatureManager(data, map);
   
   const modal = new StatsModal(features);
-  map.on("mousemove", modal.handleMouseEvent.bind(modal));
 
-  // -- create bounding spheres around each poly
-  // when the mouse moves:
+  document.getElementById("loading").classList.add("hidden");
+  map.on("mousemove", modal.handleMouseEvent.bind(modal));
 }
