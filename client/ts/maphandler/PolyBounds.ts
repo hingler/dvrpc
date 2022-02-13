@@ -15,8 +15,7 @@ export class PolyBounds {
     this.props = props;
   }
   
-  // establish a center point from polys[0]
-  // all testing will be done with this metric
+  // generates collision data for an individual poly
   private getVertexSphereMap() {
     let temp = [0, 0] as Array<number> as vec2;
     for (let i = 0; i < this.points[0].length; i++) {
@@ -40,14 +39,22 @@ export class PolyBounds {
     this.radius = maxLength;
   }
 
+  /**
+   * @returns polygon data for this point.
+   */
   getPolyData() {
     return this.points as Array<Array<vec2>>;
   }
 
+  /**
+   * Tests a particular point on the map against our collision data.
+   * @param latlong - the lat/long point we wish to test
+   * @returns true if the point is inside the polygon, false otherwise
+   */
   testCollision(latlong: vec2) {
     const temp = [] as Array<number> as vec2;
     if (vec2.length(vec2.sub(temp, latlong, this.center)) > this.radius) {
-      // outside of the sphere, no chance of a collision -- bail.
+      // outside of bounding sphere, no chance of a collision -- bail.
       return false;
     }
 

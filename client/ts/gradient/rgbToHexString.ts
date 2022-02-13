@@ -1,6 +1,10 @@
 import { vec3 } from "gl-matrix";
 
-// work with 255 as max
+/**
+ * Converts unsigned byte RGB data to a hex string.
+ * @param col - vec3 containing color data.
+ * @returns a string which represents the inputted color in hexadecimal.
+ */
 export function rgbToHexString(col: vec3) {
   let colR = Math.floor(col[0]).toString(16);
   let colG = Math.floor(col[1]).toString(16);

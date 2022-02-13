@@ -15,8 +15,6 @@ express.static.mime.define({
   'text/plain': ['glsl', 'frag', 'vert']
 });
 
-console.log("dingus");
-
 
 app.get("/", (req, res) => {
   res.send("ok");
