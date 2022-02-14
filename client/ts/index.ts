@@ -41,4 +41,6 @@ async function main() {
   features = new FeatureManager(data, map);
   const modal = new StatsModal(features);
   anim.endLoadAnimation();
+
+  document.getElementById("loading").classList.add("hidden");
 }
