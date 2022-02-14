@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { LoadHandler } from "./loadHandler";
+import { LoadHandler } from "./LoadHandler";
 import { DVRPCFeatureCollection } from "./mapdata/mapTypes";
 import { FeatureManager } from "./maphandler/FeatureManager";
 import { StatsModal } from "./maphandler/StatsModal";
