@@ -42,7 +42,7 @@ export class FeatureManager {
     colorGrad.addRGBStop([255, 255, 0], 32);
     for (let col of colorMap) {
       const colString = rgbToHexString(colorGrad.getColor(col[0]) as vec3);
-      const poly = L.polygon(col[1], { color: colString, weight: 1});
+      const poly = L.polygon(col[1], { color: colString, weight: 1, fillOpacity: 0.5});
       map.addLayer(poly);
     }
 
